@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/border">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Preferences"
         android:id="@+id/textView3"
-        android:layout_below="@+id/tvAddress"
         android:layout_centerHorizontal="true"
         android:textColor="#010101"/>
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Peanut Free"
+        android:text="Vegetarian"
         android:id="@+id/PFCheckBox"
         android:layout_below="@+id/textView3"
-        android:layout_alignLeft="@+id/btnGPSShowLocation"
-        android:layout_alignStart="@+id/btnGPSShowLocation"/>
+        android:checked="false" />
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Oil Free"
+        android:text="Low Fat"
         android:id="@+id/OFCheckBox"
         android:layout_below="@+id/PFCheckBox"
         android:layout_alignLeft="@+id/PFCheckBox"
@@ -37,15 +36,7 @@
         android:id="@+id/VeganCheckBox"
         android:layout_below="@+id/OFCheckBox"
         android:layout_alignLeft="@+id/OFCheckBox"
-        android:layout_alignStart="@+id/OFCheckBox"/>
-
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sugar Free"
-        android:id="@+id/SFCheckBox"
-        android:layout_below="@+id/VeganCheckBox"
-        android:layout_alignLeft="@+id/VeganCheckBox"
-        android:layout_alignStart="@+id/VeganCheckBox"/>
+        android:layout_alignStart="@+id/OFCheckBox"
+        android:checked="false" />
 
 </RelativeLayout>

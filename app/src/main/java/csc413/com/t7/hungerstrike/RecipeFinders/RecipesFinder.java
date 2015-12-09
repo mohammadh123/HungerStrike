@@ -3,6 +3,7 @@ package csc413.com.t7.hungerstrike.RecipeFinders;
  * Created by Mardan Anwar and Anu on 11/30/2015.
  */
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.text.Html;
 import android.text.TextUtils;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import csc413.com.t7.hungerstrike.VolleySingleton;
 
 public class RecipesFinder
 {
+    private SharedPreferences preference;
     private String key;
     public String apiName;
 
@@ -119,6 +121,9 @@ public class RecipesFinder
         public AtomicInteger nRequests;
         public int max_queries;
 
+//        SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        SharedPreferences preference = parentActivity.getSharedPreferences("pref", parentActivity.MODE_PRIVATE);
+
         public Yummly_Handler(AtomicInteger nRequests, int max_queries)
         {
             this.nRequests = nRequests;
@@ -130,6 +135,15 @@ public class RecipesFinder
             String url = search_url + String.format("_app_id=ed502541&_app_key=%s&q=%s", key, TextUtils.join(",", ingredients.toArray()));
 //            String url2 = search_url2 + String.format("q=%s&app_id=5b5cdfb6&app_key=%s", TextUtils.join(",", ingredients.toArray()), EdamamKey);
 
+//            boolean isCheckboxSet = preference.getBoolean("vegan", true);
+            if (preference.getBoolean("vegan", true) == true)
+            {
+                url = url + "&allowedDiet[]=386^Vegan";
+            }
+            else if (preference.getBoolean("vegan", false) == false)
+            {
+                url = search_url + String.format("_app_id=ed502541&_app_key=%s&q=%s", key, TextUtils.join(",", ingredients.toArray()));
+            }
             // Add 1 to the number of requests made
             nRequests.incrementAndGet();
             // Retrieve recipes
@@ -164,7 +178,7 @@ public class RecipesFinder
         }
 
         public JsonObjectRequest jsObjRequest(final Context parentActivity, final RecipeTie recipe) {
-            String url = get_url + String.format("_app_id=ed502541&_app_key=%s&q=%s", key, recipe.getRId());
+            String url = get_url + String.format("%s&_app_id=ed502541&_app_key=%s", recipe.getRId(), key);
             // Add 1 to the number of requests made
             nRequests.incrementAndGet();
             // Read ingredients for each recipe
@@ -174,7 +188,7 @@ public class RecipesFinder
                 public void onResponse(JSONObject response) {
                     try {
                         nRequests.decrementAndGet();
-                        JSONArray ingredients = response.getJSONObject("matches").getJSONArray("ingredients");
+                        JSONArray ingredients = response.getJSONArray("ingredientLines");
                         for (int i = 0; i < ingredients.length(); i++) {
                             // recipe.addIngredient(new Ingredient(ingredients.getString(i), 0));
                         }
@@ -231,7 +245,6 @@ public class RecipesFinder
                 e.printStackTrace();
             }
 
-
             recipe.setTitle(title);
             recipe.setRId(recipe_id);
             recipe.setImage_url(image_url);
@@ -242,27 +255,27 @@ public class RecipesFinder
 
 
 
-
-
-
-
-
-
-
-
-
         public String search_url2 = "https://api.edamam.com/search?";
         public String get_url2 = "https://api.edamam.com/search?";
 
         public JsonObjectRequest jsObjRequest2(final Context parentActivity, List<String> ingredients, final List<RecipeTie> foundEdamamRecipes)
         {
             //   q=beef    &app_id=de16cbcb     &app_key=af009801f57f9b9d0813b8f2a8d246f3
-            String url = search_url2 + String.format("q=%s&app_id=5b5cdfb6&app_key=%s", TextUtils.join(",", ingredients.toArray()), EdamamKey);
+            String url2 = search_url2 + String.format("q=%s&app_id=7ae78f96&app_key=%s", TextUtils.join(",", ingredients.toArray()), EdamamKey);
 
+//            boolean isCheckboxSet = preference.getBoolean("vegan", false);
+            if (preference.getBoolean("vegan", true) == true)
+            {
+                url2 = url2 + "&health=vegan";
+            }
+            else if (preference.getBoolean("vegan", false) == false)
+            {
+                url2 = search_url2 + String.format("q=%s&app_id=7ae78f96&app_key=%s", TextUtils.join(",", ingredients.toArray()), EdamamKey);
+            }
             // Add 1 to the number of requests made
             nRequests.incrementAndGet();
             // Retrieve recipes
-            JsonObjectRequest jsObjR2 = new JsonObjectRequest(Request.Method.GET, url, (String)null, new Listener<JSONObject>()
+            JsonObjectRequest jsObjR2 = new JsonObjectRequest(Request.Method.GET, url2, (String)null, new Listener<JSONObject>()
             {
                 @Override
                 public void onResponse(JSONObject response)
@@ -304,11 +317,11 @@ public class RecipesFinder
 
         public JsonObjectRequest jsObjRequest2(final Context parentActivity, final RecipeTie edamamRecipe)
         {
-            String url = get_url2 + String.format("q=%s&app_id=5b5cdfb6&app_key=%s", edamamRecipe.getTitle(), EdamamKey);
+            String url2 = get_url2 + String.format("q=%s&app_id=7ae78f96&app_key=%s", edamamRecipe.getRId(), EdamamKey);
             // Add 1 to the number of requests made
             nRequests.incrementAndGet();
             // Read ingredients for each edamamRecipe
-            JsonObjectRequest jsObjR2 = new JsonObjectRequest(Request.Method.GET, url, (String)null, new Listener<JSONObject>()
+            JsonObjectRequest jsObjR2 = new JsonObjectRequest(Request.Method.GET, url2, (String)null, new Listener<JSONObject>()
             {
                 @Override
                 public void onResponse(JSONObject response)
@@ -316,7 +329,7 @@ public class RecipesFinder
                     try
                     {
                         nRequests.decrementAndGet();
-                        JSONArray ingredients = response.getJSONObject("recipe").getJSONArray("ingredientLines");
+                        JSONArray ingredients = response.getJSONArray("ingredientLines");
                         for (int i = 0; i < ingredients.length(); i++)
                         {
                             //  edamamRecipe.addIngredient(new Ingredient(ingredients.getString(i), 0));
@@ -350,6 +363,7 @@ public class RecipesFinder
         {
             final RecipeTie edamamRecipe = new RecipeTie();
             String title = "";
+            String Uri = "";
             String recipe_id = "";
             String image_url = "";
             String apiname = "edamam";
@@ -361,11 +375,17 @@ public class RecipesFinder
             } catch (JSONException ex) {
                 Toast.makeText(parentActivity, "Error parsing title", Toast.LENGTH_SHORT).show();
             }
-            try {
-                recipe_id = Html.fromHtml(jsonObject.getJSONObject("recipe").getString("uri")).toString();
+            try
+            {
+                /** Splitting to extract the recipe ID from URI */
+                Uri = Html.fromHtml(jsonObject.getJSONObject("recipe").getString("uri")).toString();
+                String [] separated = Uri.split("_");
+                recipe_id = separated[1];
 
-            } catch (JSONException ex) {
-                Toast.makeText(parentActivity, "Error parsing recipe_id", Toast.LENGTH_SHORT).show();
+            }
+            catch (JSONException ex)
+            {
+                Toast.makeText(parentActivity, "Error parsing URI", Toast.LENGTH_SHORT).show();
             }
 
 

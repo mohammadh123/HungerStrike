@@ -205,8 +205,6 @@ public class getrecipedetail extends AppCompatActivity {
                 recipe_url.loadUrl(result);
                 //setContentView(R.layout.activity_getrecipedetail);
             }
-
-
         }
     }
 }

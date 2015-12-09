@@ -68,11 +68,14 @@
             android:required="true" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".MapsActivity.MapsActivity"
             android:label="@string/title_activity_maps" >
         </activity>
-        <activity android:name=".getrecipedetail" >
+
+        <activity
+            android:name=".getrecipedetail" >
         </activity>
+
     </application>
 
 </manifest>

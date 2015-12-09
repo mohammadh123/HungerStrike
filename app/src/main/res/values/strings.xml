@@ -3,8 +3,9 @@
 
     <string name="title_section1">My Ingredients</string>
     <string name="title_section2">Find Recipes</string>
-    <string name="title_section4">Saved Recipes</string>
-    <string name="title_section5">Shopping List</string>
+    <string name="title_section3">Saved Recipes</string>
+
+    <string name="btnFind">Find Nearby Grocery Stores</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -12,7 +13,7 @@
     <string name="action_settings">Settings</string>
     <string name="need_using_soon">Need Using Soon</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_maps">Map</string>
 

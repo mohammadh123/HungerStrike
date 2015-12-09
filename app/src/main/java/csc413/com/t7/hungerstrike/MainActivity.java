@@ -168,8 +168,6 @@ public class MainActivity extends AppCompatActivity implements TabListener {
                     return RecipesFragment.newInstance(position + 1);
                 case 2:
                     return PlaceholderFragment.newInstance(position + 1);
-                case 3:
-                    return PlaceholderFragment.newInstance(position + 1);
             }
             return null;
         }
@@ -177,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements TabListener {
         @Override
         public int getCount() {
             // Show total number of pages.
-            return 4;
+            return 3;
         }
 
         @Override
@@ -190,9 +188,7 @@ public class MainActivity extends AppCompatActivity implements TabListener {
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
                 case 2:
-                    return getString(R.string.title_section4).toUpperCase(l);
-                case 3:
-                    return "Shopping List".toUpperCase(l);
+                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }

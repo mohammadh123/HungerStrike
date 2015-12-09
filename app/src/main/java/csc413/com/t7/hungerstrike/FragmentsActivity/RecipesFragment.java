@@ -18,13 +18,13 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import csc413.com.t7.hungerstrike.MapsActivity.MapsActivity;
 import csc413.com.t7.hungerstrike.R;
 import csc413.com.t7.hungerstrike.RecipeFinders.RecipesFinder;
 import csc413.com.t7.hungerstrike.RecipeStrings.RecipeTie;
@@ -65,13 +65,20 @@ public class RecipesFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        final View rootView = inflater.inflate(R.layout.fragment_yummly, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_recipes, container, false);
 
         database = new DBInterface(getActivity());
         database.open();
 
         Button searchButton = (Button) rootView.findViewById(R.id.findRecipeButton);
         // Check if there is network connection
+        Button mapBtn = (Button) rootView.findViewById(R.id.MapButton);
+        mapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), MapsActivity.class));
+            }
+        });
         searchButton.setOnClickListener(new Button.OnClickListener()
         {
             @Override
@@ -110,8 +117,6 @@ public class RecipesFragment extends Fragment
                                 ListView listView = (ListView) rootView.findViewById(R.id.foundRecipesList);
                                 ArrayAdapter<RecipeTie> adapter = (ArrayAdapter<RecipeTie>) listView.getAdapter();
                                 adapter.notifyDataSetChanged();
-                                TextView mTxtView = (TextView) rootView.findViewById(R.id.mText);
-                                mTxtView.setText(nRequests.toString());
                             }
                         }
                         public void onFinish()
@@ -130,22 +135,6 @@ public class RecipesFragment extends Fragment
             }
         });
 
-        Button refreshButton = (Button) rootView.findViewById(R.id.refresh);
-        // Check if there is network connection
-        refreshButton.setOnClickListener(new Button.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                // Update ListView
-                ListView listView = (ListView) rootView.findViewById(R.id.foundRecipesList);
-                ArrayAdapter<RecipeTie> adapter = (ArrayAdapter<RecipeTie>) listView.getAdapter();
-                adapter.notifyDataSetChanged();
-                TextView mTxtView = (TextView) rootView.findViewById(R.id.mText);
-                mTxtView.setText(nRequests.toString());
-            }
-        });
-
         RowAdapter adapter = new RowAdapter(getActivity(),foundRecipes,database);
         ListView listView = (ListView) rootView.findViewById(R.id.foundRecipesList);
         listView.setAdapter(adapter);
@@ -155,12 +144,12 @@ public class RecipesFragment extends Fragment
 
         vollySingleton = VolleySingleton.getInstance(getActivity());
 
-        recipeFinder = new RecipesFinder("Yummly","0f46aa8f65b15b601ab91354337ccd44","62bb003f040913e957cf81070e39d44b",
+        recipeFinder = new RecipesFinder("Yummly","0f46aa8f65b15b601ab91354337ccd44","62b1961b12d7e4b28ad90b40854bf572",
                 getActivity(), vollySingleton,foundRecipes, nRequests);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-               // Toast.makeText(getActivity(), "list clicked", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getActivity(), "list clicked", Toast.LENGTH_LONG).show();
                 String[] allingredients = foundRecipes.get(position).getIngredientarr();
 
                 Bundle extraa = new Bundle();
@@ -168,13 +157,14 @@ public class RecipesFragment extends Fragment
                 extraa.putString("imageurl", foundRecipes.get(position).getImage_url());
                 extraa.putString("recipename", foundRecipes.get(position).getTitle());
                 extraa.putString("apiname", foundRecipes.get(position).getApiname());
-               extraa.putStringArray("ingredientarray", allingredients);
+                extraa.putStringArray("ingredientarray", allingredients);
                 Intent getDetails = new Intent(getActivity(), getrecipedetail.class);
                 getDetails.putExtras(extraa);
                 startActivity(getDetails);
 
             }
         });
+
         return rootView;
     }
 

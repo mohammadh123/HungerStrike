@@ -18,11 +18,10 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import csc413.com.t7.hungerstrike.MapsActivity;
 import csc413.com.t7.hungerstrike.Preferences;
 import csc413.com.t7.hungerstrike.R;
-import csc413.com.t7.hungerstrike.SQLite.DBInterface;
 import csc413.com.t7.hungerstrike.RecipeStrings.Ingredient;
+import csc413.com.t7.hungerstrike.SQLite.DBInterface;
 
 public class StockFragment extends Fragment
 {
@@ -42,8 +41,6 @@ public class StockFragment extends Fragment
         fragment.setArguments(args);
         return fragment;
     }
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -83,6 +80,7 @@ public class StockFragment extends Fragment
                 Ingredient ing = new Ingredient();
                 ing.setName(ing_name.getText().toString());
 
+                ing.setPreferred(1);
                 // Add ingredient to the Ingredient database
                 long status = dbInterface.insertIngredient(ing);
 
@@ -133,14 +131,6 @@ public class StockFragment extends Fragment
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), Preferences.class));
-            }
-        });
-
-        Button mapBtn = (Button) rootView.findViewById(R.id.MapButton);
-        mapBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getActivity(), MapsActivity.class));
             }
         });
 
