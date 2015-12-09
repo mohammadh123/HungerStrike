@@ -4,6 +4,8 @@ package csc413.com.t7.hungerstrike.MapsActivity;
  * Created by Madhura
  */
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -38,9 +40,10 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
         if (!isGooglePlayServicesAvailable()) {
             finish();
         }
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.fragment_recipes);
 
-        Button btnFind = (Button) findViewById(R.id.btnFind);
+        Button btnFind = (Button) findViewById(R.id.MapButton);
+        setContentView(R.layout.activity_maps);
         SupportMapFragment supportMapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.googleMap);
         mMap = supportMapFragment.getMap();
@@ -54,25 +57,44 @@ public class MapsActivity extends FragmentActivity implements LocationListener {
             onLocationChanged(location);
         }
 
-        btnFind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String type ="grocery_or_supermarket";
-                //String type = placeText.getText().toString();
-                StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
-                googlePlacesUrl.append("location=" + latitude + "," + longitude);
-                googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
-                googlePlacesUrl.append("&types=" + type);
-                googlePlacesUrl.append("&sensor=true");
-                googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
+        onMapBtnClick();
 
-                GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
-                Object[] toPass = new Object[2];
-                toPass[0] = mMap;
-                toPass[1] = googlePlacesUrl.toString();
-                googlePlacesReadTask.execute(toPass);
-            }
-        });
+//        btnFind.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                String type ="grocery_or_supermarket";
+//                //String type = placeText.getText().toString();
+//                StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+//                googlePlacesUrl.append("location=" + latitude + "," + longitude);
+//                googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+//                googlePlacesUrl.append("&types=" + type);
+//                googlePlacesUrl.append("&sensor=true");
+//                googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
+//
+//                GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+//                Object[] toPass = new Object[2];
+//                toPass[0] = mMap;
+//                toPass[1] = googlePlacesUrl.toString();
+//                googlePlacesReadTask.execute(toPass);
+//            }
+//        });
+    }
+
+    private void onMapBtnClick() {
+        String type ="grocery_or_supermarket";
+        //String type = placeText.getText().toString();
+        StringBuilder googlePlacesUrl = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+        googlePlacesUrl.append("location=" + latitude + "," + longitude);
+        googlePlacesUrl.append("&radius=" + PROXIMITY_RADIUS);
+        googlePlacesUrl.append("&types=" + type);
+        googlePlacesUrl.append("&sensor=true");
+        googlePlacesUrl.append("&key=" + GOOGLE_API_KEY);
+
+        GooglePlacesReadTask googlePlacesReadTask = new GooglePlacesReadTask();
+        Object[] toPass = new Object[2];
+        toPass[0] = mMap;
+        toPass[1] = googlePlacesUrl.toString();
+        googlePlacesReadTask.execute(toPass);
     }
 
 

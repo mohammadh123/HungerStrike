@@ -1,17 +1,8 @@
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical">
-
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btnFind"
-        android:id="@+id/btnFind"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onSearch" />
 
     <fragment
         android:id="@+id/googleMap"
@@ -21,4 +12,4 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true" />
 
-</LinearLayout>
+</RelativeLayout>
